@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>関数グラフ作成サイト</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <main class="container">
+    <h1>関数グラフ作成サイト</h1>
+    <p class="desc">式を入力して、グラフ画像を生成できます（カンマ区切りで複数式可）。</p>
+
+    <form method="post" class="card">
+      <label>式 (例: x**2, sin(x), log(x+11))
+        <input type="text" name="expr" value="{{ form.expr }}" required>
+      </label>
+
+      <div class="row">
+        <label>xmin
+          <input type="number" step="any" name="xmin" value="{{ form.xmin }}" required>
+        </label>
+
+        <label>xmax
+          <input type="number" step="any" name="xmax" value="{{ form.xmax }}" required>
+        </label>
+
+        <label>points
+          <input type="number" min="2" name="points" value="{{ form.points }}" required>
+        </label>
+      </div>
+
+      <label>タイトル
+        <input type="text" name="title" value="{{ form.title }}">
+      </label>
+
+      <button type="submit">グラフを生成</button>
+    </form>
+
+    {% if error %}
+      <div class="message error">{{ error }}</div>
+    {% endif %}
+
+    {% if warnings %}
+      <ul class="message warn">
+        {% for w in warnings %}
+          <li>{{ w }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if image_data %}
+      <section class="result card">
+        <h2>生成結果</h2>
+        <img src="data:image/png;base64,{{ image_data }}" alt="生成したグラフ" />
+        <p>画像を右クリックして保存できます。</p>
+      </section>
+    {% endif %}
+  </main>
+</body>
+</html>
